@@ -79,6 +79,19 @@ public:
 		return result;
 	}
 
+	// scalar addition 
+	Matrix operator+(const double scalar) const {
+		Matrix result(rows, cols);
+
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				result.data[i][j] = data[i][j] + scalar;
+			}
+		}
+		return result;
+	}
+
+
 	// scalar subtraction
 	Matrix operator-(const double scalar) const {
 		Matrix result(rows, cols);
@@ -112,7 +125,7 @@ public:
 	}
 
 	// elementwise multiplication
-	Matrix elementwiseMult(const Matrix& other) {
+	Matrix elementwiseMult(const Matrix& other) const {
 		if (size() != other.size()) {
 			throw std::runtime_error("Matrix dimensions do not match for elementwise multiplication.");
 		}
@@ -122,6 +135,18 @@ public:
 		for (size_t i = 0; i < rows; i++) {
 			for (size_t j = 0; j < cols; j++) {
 				result.data[i][j] = data[i][j] * other.data[i][j];
+			}
+		}
+		return result;
+	}
+
+	// scalar multiplication
+	Matrix operator*(const double scalar) const {
+		Matrix result(rows, cols);
+
+		for (int i = 0; i < rows; i++) {
+			for (int j = 0; j < cols; j++) {
+				result.data[i][j] = data[i][j] * scalar;
 			}
 		}
 		return result;
