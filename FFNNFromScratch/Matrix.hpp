@@ -1,11 +1,17 @@
+#pragma once
 #include <vector>
 #include <iostream>
 #include <string>
 
 class Matrix {
 public:
+	// Default constructor
+	Matrix() : rows(0), cols(0) { 
+		data.resize(rows, std::vector<double>(cols));
+	}
+
 	// Constructor
-	Matrix(size_t numRows, size_t numCols, size_t initVal = 0.0) : rows(numRows), cols(numCols)
+	Matrix(size_t numRows, size_t numCols, double initVal = 0.0) : rows(numRows), cols(numCols)
 	{
 		data.resize(rows, std::vector<double>(cols, initVal)); // initialize matrix of vals
 	}

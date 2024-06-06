@@ -1,5 +1,6 @@
 #pragma once
 #include "Neuron.hpp"
+#include "Matrix.hpp"
 
 class Layer {
 public:

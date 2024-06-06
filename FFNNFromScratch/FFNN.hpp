@@ -2,6 +2,7 @@
 #include <numeric>
 #include <random>
 #include "Layer.hpp"
+#include "Matrix.hpp"
 
 class FFNN {
 public:
@@ -55,26 +56,30 @@ public:
 				}
 
 				// forward and backward pass for the mini batch
-				Gradients grad = backward(miniBatchData, miniBatchTargets, learningRate);
+				Gradients grad = backward(miniBatchData, miniBatchTargets);
 
 				// update the mini batch weights and biases using the gradients
 				for (size_t i = 0; i < layers.size(); i++) {
+					layers[i].weights.shape();
+					grad.weightGradients[i].shape();
+					layers[i].biases.shape();
+					grad.biasGradients[i].shape();
+
 					layers[i].weights = layers[i].weights - (grad.weightGradients[i] * learningRate);
 					layers[i].biases = layers[i].biases - (grad.biasGradients[i] * learningRate);
 				}
-
 			}
 		}
 	}
 
 	// inputs = training data input features, outputs = predictions from forward pass, targets = y_actual
 	// input matrix is transpoed to features x samples (features, samples) to simplify matrix operations
-	Gradients backward(const std::vector<Matrix>& inputs, Matrix targets, double learningRate) {
+	Gradients backward(const std::vector<Matrix>& inputs, Matrix targets) {
 		std::vector<Matrix> activations; // vector of activation matrices for each layer
 		std::vector<Matrix> zs; // vector of weighted input matrices for each layer
 
 		 // forward pass to store activations and z vectors
-		Matrix activation = inputs.back();
+		Matrix activation = inputs[0]; // input layer
 		activations.push_back(activation);
 
 		for (size_t i = 0; i < layers.size() - 1; i++) {
@@ -86,7 +91,7 @@ public:
 		}
 
 		// backward pass 
-		Matrix lastLayerActivations = activations.back();
+		Matrix lastLayerActivations = inputs.back(); // output layer
 		Matrix secondToLastLayerActivations = activations[activations.size() - 2]; // used for initial weight gradients 
 		Matrix lastLayerZs = zs.back();
 
@@ -102,7 +107,7 @@ public:
 		// gradients for biases of the last layer neurons
 		biasGradients.back() = error;
 
-		for (int i = layers.size() - 2; i >= 0; i--) {
+		for (size_t i = layers.size() - 2; i >= 0; i--) {
 			Matrix z = zs.back();
 			Matrix sp = sigmoidPrime(z);
 
@@ -138,8 +143,10 @@ public:
 
 	Matrix sigmoidPrime(Matrix& z) {
 		Matrix sig = sigmoid(z);
+
 		// 1 - sig, where 1 is a matrix of 1s the same size as sig
-		return sig * (Matrix(z.numRows(), z.numCols(), 1.0) - sig);
+		Matrix temp = Matrix(sig.numRows(), sig.numCols(), 1.0) - sig;
+		return sig * temp.T();
 	}
 
 

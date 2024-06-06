@@ -42,7 +42,7 @@ public:
 	}
 
 private:
-	int numInputs;
+	size_t numInputs;
 
 	std::vector<double> weights;
 	double bias;
