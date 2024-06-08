@@ -33,7 +33,7 @@ public:
 		return activations;
 	}
 
-	void SGD(const std::vector<Matrix>& trainingData, const Matrix& targets, int epochs, int miniBatchSize, double learningRate) {
+	void SGD(const std::vector<Matrix>& trainingData, const std::vector<int>& targets, int epochs, int miniBatchSize, double learningRate) {
 		for (int epoch = 0; epoch < epochs; epoch++) {
 			// shuffle training data
 			std::vector<size_t> indices(trainingData.size());
@@ -44,7 +44,7 @@ public:
 			// divide data into mini batches
 			for (size_t i = 0; i < trainingData.size(); i += miniBatchSize) {
 				std::vector<Matrix> miniBatchData;
-				Matrix miniBatchTargets(targets.numRows(), 1);
+				std::vector<int> miniBatchTargets;
 
 				// collect mini batch data and target
 				// for MNIST, trainingData[indices[j]] is a matrix representing 1 full image
@@ -52,7 +52,7 @@ public:
 				// note that the data has not been shuffled, but rather the indices, changing the order the data is read
 				for (size_t j = i; j < std::min(i + miniBatchSize, trainingData.size()); j++) {
 					miniBatchData.push_back(trainingData[indices[j]]);
-					miniBatchTargets[j] = targets[indices[j]];
+					miniBatchTargets.push_back(targets[indices[j]]);
 				}
 
 				// forward and backward pass for the mini batch
@@ -60,11 +60,6 @@ public:
 
 				// update the mini batch weights and biases using the gradients
 				for (size_t i = 0; i < layers.size(); i++) {
-					layers[i].weights.shape();
-					grad.weightGradients[i].shape();
-					layers[i].biases.shape();
-					grad.biasGradients[i].shape();
-
 					layers[i].weights = layers[i].weights - (grad.weightGradients[i] * learningRate);
 					layers[i].biases = layers[i].biases - (grad.biasGradients[i] * learningRate);
 				}
@@ -74,7 +69,7 @@ public:
 
 	// inputs = training data input features, outputs = predictions from forward pass, targets = y_actual
 	// input matrix is transpoed to features x samples (features, samples) to simplify matrix operations
-	Gradients backward(const std::vector<Matrix>& inputs, Matrix targets) {
+	Gradients backward(const std::vector<Matrix>& inputs, std::vector<int>& targets) {
 		std::vector<Matrix> activations; // vector of activation matrices for each layer
 		std::vector<Matrix> zs; // vector of weighted input matrices for each layer
 
@@ -82,7 +77,7 @@ public:
 		Matrix activation = inputs[0]; // input layer
 		activations.push_back(activation);
 
-		for (size_t i = 0; i < layers.size() - 1; i++) {
+		for (size_t i = 0; i < layers.size(); i++) {
 			// for each layer, get the weighted inputs from the respective weight matrix & bias vector
 			Matrix z = (layers[i].weights * activation) + layers[i].biases;
 			zs.push_back(z);
@@ -90,14 +85,16 @@ public:
 			activations.push_back(activation);
 		}
 
+		/*dont forget about this part, i changed this but it might need to go back to how it was, make sure
+		its ok for activatoin = inputs[0] to happen*/
 		// backward pass 
-		Matrix lastLayerActivations = inputs.back(); // output layer
-		Matrix secondToLastLayerActivations = activations[activations.size() - 2]; // used for initial weight gradients 
+		//Matrix lastLayerZs = layers.back().weights * activation + layers.back().biases; // output layer
 		Matrix lastLayerZs = zs.back();
+		Matrix lastLayerActivations = activations.back(); // output layer
+		Matrix secondToLastLayerActivations = activations[activations.size() - 2]; // used for initial weight gradients 
 
 		// error term for last layer of model
-		Matrix error = meanSquaredErrorDerivative(lastLayerActivations, targets).elementwiseMult(sigmoidPrime(lastLayerZs));
-
+		Matrix error = meanSquaredErrorDerivative(lastLayerActivations, Matrix::toMatrix(targets)).elementwiseMult(sigmoidPrime(lastLayerZs));
 		// collections of matrices to pass between each layer
 		std::vector<Matrix> biasGradients(layers.size()); 
 		std::vector<Matrix> weightGradients(layers.size()); 
@@ -107,8 +104,9 @@ public:
 		// gradients for biases of the last layer neurons
 		biasGradients.back() = error;
 
-		for (size_t i = layers.size() - 2; i >= 0; i--) {
-			Matrix z = zs.back();
+		for (int i = layers.size() - 2; i >= 0; i--) { // i needs to be int, probably because .size() returns int
+			Matrix z = zs[i];
+
 			Matrix sp = sigmoidPrime(z);
 
 			error = (layers[i + 1].weights.T() * error).elementwiseMult(sp); // transpose to propagate backwards
@@ -146,7 +144,7 @@ public:
 
 		// 1 - sig, where 1 is a matrix of 1s the same size as sig
 		Matrix temp = Matrix(sig.numRows(), sig.numCols(), 1.0) - sig;
-		return sig * temp.T();
+		return sig.elementwiseMult(temp);
 	}
 
 

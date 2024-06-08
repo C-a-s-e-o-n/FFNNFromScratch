@@ -24,9 +24,7 @@ int main() {
         trainingData.push_back(input2);
 
         // Create targets for the training data
-        Matrix targets(2, 1);
-        targets[0][0] = 0.5;
-        targets[1][0] = 0.6;
+        std::vector<int> targets = { 1, 0 };
 
         std::vector<int> layers = { 2, 3, 1 }; // 2 matrices of data, 3 hidden nodes, 1 output number
 

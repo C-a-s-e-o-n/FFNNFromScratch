@@ -35,6 +35,36 @@ public:
 		return cols;
 	}
 
+	void setColumn(size_t colIdx, const std::vector<double>& colData) {
+		if (colIdx >= cols) {
+			throw std::invalid_argument("Invalid column index.");
+		}
+
+		else if (colData.size() != rows) {
+			throw std::invalid_argument("Invalid column data size.");
+		}
+
+		for (size_t i = 0; i < rows; i++) {
+			data[i][colIdx] = colData[i];
+		}
+	}
+
+	const std::vector<double>& getColumn(size_t colIdx) const {
+		if (colIdx >= cols) {
+			throw std::out_of_range("Invalid col index.");
+		}
+
+		return data[colIdx];
+	}
+
+	const std::vector<double>& getRow(size_t rowIdx) const {
+		if (rowIdx >= rows) {
+			throw std::out_of_range("Invalid row index.");
+		}
+
+		return data[rowIdx];
+	}
+
 	void shape() const noexcept {
 		std::cout << rows << " x " << cols << std::endl;
 	}
@@ -133,6 +163,8 @@ public:
 	// elementwise multiplication
 	Matrix elementwiseMult(const Matrix& other) const {
 		if (size() != other.size()) {
+			this->shape();
+			other.shape();
 			throw std::runtime_error("Matrix dimensions do not match for elementwise multiplication.");
 		}
 
@@ -167,6 +199,16 @@ public:
 			for (int j = 0; j < cols; j++) {
 				result.data[j][i] = data[i][j];
 			}
+		}
+		return result;
+	}
+
+	// converting from vector to 1-dimensional matrix
+	static Matrix toMatrix(const std::vector<int>& vec) noexcept{
+		Matrix result(vec.size(), 1);
+
+		for (size_t i = 0; i < vec.size(); i++) {
+			result.data[i][0] = vec[i];
 		}
 		return result;
 	}
