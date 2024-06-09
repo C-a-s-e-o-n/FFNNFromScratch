@@ -12,13 +12,13 @@ public:
 	{
 		for (size_t i = 0; i < numNeurons; i++) {
 			for (size_t j = 0; j < numInputsPerNeuron; j++) {
-				weights[i][j] = 0.1; // placeholder
+				weights[i][j] = 0.1; 
 			}
 			biases[i][0] = 0.1;
 		}
 	}
 
 	Matrix feedForward(const Matrix& inputs) const {
-		return (weights * inputs) + biases;
+		return (inputs * weights) + biases; // order matters with mat mult, remember
 	}
 };

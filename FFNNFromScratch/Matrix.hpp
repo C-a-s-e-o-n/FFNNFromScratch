@@ -23,6 +23,9 @@ public:
 	}
 
 	// used to access but not modify, with the same code as the modifying function
+	// note that the first const indicates the return matrix's structure cannot be modified,
+	// although the elements inside can be (because they are not const)
+	// also, the const at the end shows that this function will not change member vars of the class
 	const std::vector<double>& operator[](size_t index) const {
 		return data[index];
 	}
@@ -49,12 +52,16 @@ public:
 		}
 	}
 
-	const std::vector<double>& getColumn(size_t colIdx) const {
+	Matrix getColumn(size_t colIdx) const {
 		if (colIdx >= cols) {
 			throw std::out_of_range("Invalid col index.");
 		}
 
-		return data[colIdx];
+		Matrix result(rows, 1);
+		for (size_t i = 0; i < rows; ++i) {
+			result.data[i][0] = data[i][colIdx];
+		}
+		return result;
 	}
 
 	const std::vector<double>& getRow(size_t rowIdx) const {
@@ -211,6 +218,17 @@ public:
 			result.data[i][0] = vec[i];
 		}
 		return result;
+	}
+
+	// flatten matrix to column vector
+	Matrix flatten() const {
+		Matrix flattened(numRows() * numCols(), 1);
+		for (size_t i = 0; i < numRows(); i++) {
+			for (size_t j = 0; j < numCols(); j++) {
+				flattened.data[i * numCols() + j][0] = data[i][j];
+			}
+		}
+		return flattened;
 	}
 
 private:

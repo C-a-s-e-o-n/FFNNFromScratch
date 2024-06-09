@@ -5,38 +5,41 @@
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
 #include "FFNN.hpp"
+#include "MNISTLoader.hpp"
 using namespace cv;
 
 
 int main() {
     try {
-        // Create a small dataset for testing
-        std::vector<Matrix> trainingData;
+        MNISTLoader trainLoader("Data/train-images.idx3-ubyte", "Data/train-labels.idx1-ubyte");
+        MNISTLoader testLoader("Data/t10k-images.idx3-ubyte", "Data/t10k-labels.idx1-ubyte");
+        //loader.display_images();
 
-        Matrix input1(2, 1);
-        input1[0][0] = 0.1;
-        input1[1][0] = 0.2;
-        trainingData.push_back(input1);
+        // retrive images as matrix objects
+        std::vector<Matrix> mnistTrain = trainLoader.getImages();
+        std::vector<int> labelsTrain = trainLoader.getLabels();
 
-        Matrix input2(2, 1);
-        input2[0][0] = 0.3;
-        input2[1][0] = 0.4;
-        trainingData.push_back(input2);
+        std::vector<Matrix> mnistTest = testLoader.getImages();
+        std::vector<int> labelsTest = testLoader.getLabels();
 
-        // Create targets for the training data
-        std::vector<int> targets = { 1, 0 };
+        // print the first image
+        /*std::cout << "First Image: " << std::endl;
+        mnist_images[0].print();
+        std::cout << "First Label: " << std::endl;
+        std::cout << labels[0] << std::endl; */
 
-        std::vector<int> layers = { 2, 3, 1 }; // 2 matrices of data, 3 hidden nodes, 1 output number
+        FFNN model({ 784, 3, 10 }); // 28 * 28 img size = 784 1-D array
 
-        FFNN model(layers);
+        model.SGD(mnistTrain, labelsTrain, 30, 32, 0.01);
 
-        model.SGD(trainingData, targets, 100, 1, 0.1);
+        double acc = model.evaluate(mnistTest, labelsTest);
+
+        std::cout << "Overall Model Accuracy: " << acc << std::endl;
+
     }
-    catch (const std::exception& e) {
-        std::cerr << "An exception occurred: " << e.what() << std::endl;
-    }
-    catch (...) {
-        std::cerr << "An unknown exception occurred" << std::endl;
+    catch (const std::exception& ex) {
+        std::cerr << "Error: " << ex.what() << std::endl;
+        return 1;
     }
 
 	return 0;
