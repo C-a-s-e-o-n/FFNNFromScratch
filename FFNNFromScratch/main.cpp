@@ -30,11 +30,11 @@ int main() {
 
         FFNN model({ 784, 3, 10 }); // 28 * 28 img size = 784 1-D array
 
-        model.SGD(mnistTrain, labelsTrain, 30, 32, 0.01);
+        model.train(mnistTrain, labelsTrain, 30, 32, 0.01);
 
-        double acc = model.evaluate(mnistTest, labelsTest);
+        //double acc = model.evaluate(mnistTest, labelsTest);
 
-        std::cout << "Overall Model Accuracy: " << acc << std::endl;
+        //std::cout << "Overall Model Accuracy: " << acc << std::endl;
 
     }
     catch (const std::exception& ex) {

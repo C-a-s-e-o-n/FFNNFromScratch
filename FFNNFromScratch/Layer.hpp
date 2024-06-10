@@ -22,15 +22,28 @@ public:
 		}
 	}
 
-	Matrix feedForward(const Matrix& inputs) {
-		z = (inputs * weights) + biases; // dont forget order matters with mat mult
+	void feedForward(const Matrix& inputs) {
+		std::cout << "inputs size: \n";
+		inputs.shape();
+		std::cout << "weights size: \n";
+		weights.shape();
+		std::cout << "biases sie: \n";
+		biases.shape();
+
+		z = (weights * inputs) + biases; // dont forget order matters with mat mult
 		activation_output = sigmoid(z);
 	}
 
 	void updateWeights(const Matrix& activation, const Matrix& delta, double learningRate) {
 
 		// update weights
-		weights = weights - (delta * activation.T() * learningRate);
+		std::cout << "delta shape\n";
+		delta.shape();
+		std::cout << "activoat\n";
+		activation.T().shape();
+		std::cout << "full shape\n";
+		(delta.T() * activation * learningRate).shape();
+		weights = weights - (delta.T() * activation * learningRate);
 		
 		// update biases
 		biases = biases - (delta * learningRate);

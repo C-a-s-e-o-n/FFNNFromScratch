@@ -18,19 +18,16 @@ public:
 		}
 	}
 
-	struct Gradients {
-		std::vector<Matrix> weightGradients;
-		std::vector<Matrix> biasGradients;
-	};
-
 	// used for testing the model on data after it has been trained
 	// inputs = test data
 	std::vector<Matrix> forward(const std::vector<Matrix> inputs) {
         std::vector<Matrix> layer_outputs;
         Matrix current_input;
 
+        
+
 		for (auto& input : inputs) {
-            current_input = input;
+            current_input = input.flatten();
             for (auto& layer : layers) {
                 layer.feedForward(current_input); // forward pass through the layer
                 current_input = layer.getOutput();
@@ -74,13 +71,16 @@ public:
                 // calc mse for mini-batch
                 double miniBatchLoss = 0.0;
                 for (size_t i = 0; i < miniBatchData.size(); i++) {
+                    std::cout << "outputs shape: \n";
+                    outputs[i].shape();
+                    std::cout << "onehotlabels shape: \n";
+                    oneHotLabels[i].shape();
                     miniBatchLoss += meanSquaredError(outputs[i], oneHotLabels[i]);
                 }
                 epochLoss += miniBatchLoss;
 
                 // Forward and backward pass for the mini-batch
                 Gradients grad = backward(miniBatchData, outputs, oneHotLabels);
-
                 // Update the mini-batch weights and biases using the gradients
                 for (size_t i = 0; i < layers.size(); i++) {
                     layers[i].updateWeights(grad.weightGradients[i], grad.biasGradients[i], learningRate);
@@ -100,15 +100,23 @@ public:
         std::vector<Matrix> weightGradients(numLayers);
         std::vector<Matrix> biasGradients(numLayers);
 
+        std::cout << "targets shape: \n";
+        targets[numLayers - 1].shape();
+
+        std::cout << "outputs shape: \n";
+        outputs[numLayers - 1].shape();
+
         // compute delta for last layer
         delta[numLayers - 1] = outputs[numLayers - 1] - targets[numLayers - 1];
+        std::cout << "Delta shape: \n";
+        delta[numLayers - 1].shape();
         weightGradients[numLayers - 1] = delta[numLayers - 1] * outputs[numLayers - 2].T();
         biasGradients[numLayers - 1] = delta[numLayers - 1];
-
+        std::cout << "all gud";
         // backpropagate error
         for (int i = numLayers - 2; i >= 0; i--) {
             delta[i] = (layers[i + 1].weights.T() * delta[i + 1]).elementwiseMult(sigmoidPrime(layers[i].z));
-            weightGradients[i] = delta[i] * inputs[i].T();
+            weightGradients[i] = delta[i] * inputs[i].flatten().T();
             biasGradients[i] = delta[i];
         }
 

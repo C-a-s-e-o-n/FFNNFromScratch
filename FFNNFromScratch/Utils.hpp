@@ -3,6 +3,11 @@
 #include "FFNN.hpp"
 #include <cassert>
 
+struct Gradients {
+    std::vector<Matrix> weightGradients;
+    std::vector<Matrix> biasGradients;
+};
+
 // one hot encoding
 std::vector<Matrix> createOneHotTargets(const std::vector<int>& targetLabels, int numClasses) {
 	std::vector<Matrix> oneHotTargets;
