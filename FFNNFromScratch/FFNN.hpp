@@ -71,19 +71,15 @@ public:
                 // calc mse for mini-batch
                 double miniBatchLoss = 0.0;
                 for (size_t i = 0; i < miniBatchData.size(); i++) {
-                    std::cout << "outputs shape: \n";
-                    outputs[i].shape();
-                    std::cout << "onehotlabels shape: \n";
-                    oneHotLabels[i].shape();
                     miniBatchLoss += meanSquaredError(outputs[i], oneHotLabels[i]);
                 }
                 epochLoss += miniBatchLoss;
 
                 // Forward and backward pass for the mini-batch
                 Gradients grad = backward(miniBatchData, outputs, oneHotLabels);
-                // Update the mini-batch weights and biases using the gradients
+
                 for (size_t i = 0; i < layers.size(); i++) {
-                    layers[i].updateWeights(grad.weightGradients[i], grad.biasGradients[i], learningRate);
+                    layers[i].updateWeightsAndBiases(grad.weightGradients[i], grad.biasGradients[i], learningRate);
                 }
             }
 
@@ -100,24 +96,26 @@ public:
         std::vector<Matrix> weightGradients(numLayers);
         std::vector<Matrix> biasGradients(numLayers);
 
-        std::cout << "targets shape: \n";
-        targets[numLayers - 1].shape();
-
-        std::cout << "outputs shape: \n";
-        outputs[numLayers - 1].shape();
-
         // compute delta for last layer
-        delta[numLayers - 1] = outputs[numLayers - 1] - targets[numLayers - 1];
-        std::cout << "Delta shape: \n";
-        delta[numLayers - 1].shape();
-        weightGradients[numLayers - 1] = delta[numLayers - 1] * outputs[numLayers - 2].T();
-        biasGradients[numLayers - 1] = delta[numLayers - 1];
-        std::cout << "all gud";
-        // backpropagate error
+        // Compute delta for the last layer
+        delta[numLayers - 1] = outputs.back() - targets.back();  // Shape should be (numOutputs x 1)
+
+        // Compute weight and bias gradients for the last layer
+        weightGradients[numLayers - 1] = delta.back() * layers[numLayers - 2].getOutput().T();  // Shape should be (numOutputs x numNeuronsInPreviousLayer)
+        biasGradients[numLayers - 1] = delta.back();  // Shape should be (numOutputs x 1)
+
+
         for (int i = numLayers - 2; i >= 0; i--) {
-            delta[i] = (layers[i + 1].weights.T() * delta[i + 1]).elementwiseMult(sigmoidPrime(layers[i].z));
-            weightGradients[i] = delta[i] * inputs[i].flatten().T();
-            biasGradients[i] = delta[i];
+            delta[i] = (layers[i + 1].weights.T() * delta[i + 1]).elementwiseMult(sigmoidPrime(layers[i].z));  // Shape should be (numNeuronsInCurrentLayer x 1)
+
+            if (i > 0) {
+                weightGradients[i] = delta[i] * layers[i - 1].getOutput().T();  // Shape should be (numNeuronsInCurrentLayer x numNeuronsInPreviousLayer)
+            }
+            else {
+                weightGradients[i] = delta[i] * inputs[i].flatten().T();  // Shape should be (numNeuronsInCurrentLayer x numInputs)
+            }
+
+            biasGradients[i] = delta[i];  // Shape should be (numNeuronsInCurrentLayer x 1)
         }
 
         return { weightGradients, biasGradients };
