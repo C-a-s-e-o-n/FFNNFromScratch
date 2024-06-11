@@ -29,13 +29,10 @@ public:
 		activation_output = sigmoid(z);
 	}
 
-	void updateWeightsAndBiases(const Matrix& weightGrad, const Matrix& biasGrad, double learningRate) {
-
-		// update weights
-		weights = weights - (weightGrad * learningRate);
-		
-		// update biases
-		biases = biases - (biasGrad * learningRate);
+	void updateWeightsAndBiases(const Matrix& weightGradient, const Matrix& biasGradient, double learningRate) {
+		// update weights and biases
+		weights = weights - (weightGradient * learningRate);
+		biases = biases - (biasGradient * learningRate);
 	}
 
 	Matrix getOutput() const {
