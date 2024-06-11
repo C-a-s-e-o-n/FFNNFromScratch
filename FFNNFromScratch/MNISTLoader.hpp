@@ -3,6 +3,7 @@
 #include <fstream>
 #include <string>
 #include "Matrix.hpp"
+#include "Utils.hpp"
 
 // MNIST is stored in big-endian format, while my system uses little-endian format
 uint32_t swap_endian(uint32_t val) {
@@ -108,7 +109,7 @@ private:
 			Matrix img_matrix(rows, cols);
 			for (int i = 0; i < rows; ++i) {
 				for (int j = 0; j < cols; ++j) {
-					img_matrix[i][j] = static_cast<double>(pixels[i * cols + j]);
+					img_matrix[i][j] = static_cast<double>(pixels[i * cols + j]) / 255.0;
 				}
 			}
 			images.push_back(img_matrix);

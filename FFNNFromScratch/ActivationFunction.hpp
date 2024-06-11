@@ -1,5 +1,6 @@
 #pragma once
 #include "Matrix.hpp"
+#include "Utils.hpp"
 
 enum class Activations {
 	sigmoid,

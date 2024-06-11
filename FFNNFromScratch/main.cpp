@@ -1,12 +1,14 @@
-#include <SFML/graphics.hpp>
-#include <iostream>
 #include <opencv2/opencv.hpp>
 #include <opencv2/core.hpp>
 #include <opencv2/imgcodecs.hpp>
 #include <opencv2/highgui.hpp>
+using namespace cv;
+#include <SFML/graphics.hpp>
+#include <iostream>
+#include "Utils.hpp"
 #include "FFNN.hpp"
 #include "MNISTLoader.hpp"
-using namespace cv;
+
 
 
 int main() {
@@ -28,13 +30,13 @@ int main() {
         std::cout << "First Label: " << std::endl;
         std::cout << labels[0] << std::endl; */
 
-        FFNN model({ 784, 3, 10 }); // 28 * 28 img size = 784 1-D array
+        FFNN model({ 784, 5, 10 }); // 28 * 28 img size = 784 1-D array
 
-        model.train(mnistTrain, labelsTrain, 30, 32, 0.01);
+        model.train(mnistTrain, labelsTrain);
 
-        //double acc = model.evaluate(mnistTest, labelsTest);
+        double acc = model.eval(mnistTest, labelsTest);
 
-        //std::cout << "Overall Model Accuracy: " << acc << std::endl;
+        std::cout << "Overall Model Accuracy: " << acc << std::endl;
 
     }
     catch (const std::exception& ex) {

@@ -2,6 +2,8 @@
 #include <vector>
 #include <iostream>
 #include <string>
+#include "Utils.hpp"
+
 
 class Matrix {
 public:
