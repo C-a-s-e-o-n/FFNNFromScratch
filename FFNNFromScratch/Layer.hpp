@@ -24,13 +24,13 @@ public:
 
 		// define dist range for random numbers
 		std::uniform_real_distribution<> weight_dis(-1.0, 1.0);
-		std::uniform_real_distribution<> bias_dis(-1.0, 1.0);
+		std::uniform_real_distribution<> bias_dis(-0.1, 0.1);
 
 		for (size_t i = 0; i < numNeurons; i++) {
 			for (size_t j = 0; j < numInputsPerNeuron; j++) {
 				weights[i][j] = weight_dis(gen); 
 			}
-			biases[i][0] = bias_dis(gen);
+			biases[i][0] = 0.1;
 		}
 	}
 

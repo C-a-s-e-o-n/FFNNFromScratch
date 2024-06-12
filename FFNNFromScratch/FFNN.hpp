@@ -164,20 +164,15 @@ public:
         }
         return maxIdx;
     }
-    int count = 0;
+
     // one hot encoding
     std::vector<Matrix> createOneHotTargets(const std::vector<int>& targetLabels, int numClasses) {
-        count++;
         std::vector<Matrix> oneHotTargets;
 
         for (const auto& label : targetLabels) {
             Matrix target(numClasses, 1, 0.0); // Initialize the target matrix with zeros
             target[label][0] = 1.0; // set corresponding class label to 1
             oneHotTargets.push_back(target);
-        }
-        if (count == 1) {
-            std::cout << targetLabels[0] << std::endl;
-            oneHotTargets[0].print();
         }
         return oneHotTargets;
     }

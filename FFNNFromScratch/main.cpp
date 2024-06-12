@@ -30,11 +30,11 @@ int main() {
         // std::cout << "First Label: " << std::endl;
         // std::cout << labelsTrain[20] << std::endl; 
 
-        FFNN model({ 784, 32, 16, 10 }); // 28 * 28 img size = 784 1-D array
+        FFNN model({ 784, 128, 64, 10 }); // 28 * 28 img size = 784 1-D array
 
         int epochs = 20;
         for (int i = 0; i < epochs; i++) {
-            model.train(mnistTrain, labelsTrain, 1, 32, .4); // Train for one epoch
+            model.train(mnistTrain, labelsTrain, 1, 32, .1); // Train for one epoch
             double acc = model.eval(mnistTest, labelsTest);
             std::cout << "Epoch: " << i << "\tOverall Model Accuracy: " << acc << std::endl;
         }
