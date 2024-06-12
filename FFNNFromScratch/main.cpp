@@ -25,18 +25,21 @@ int main() {
         std::vector<int> labelsTest = testLoader.getLabels();
 
         // print the first image
-        /*std::cout << "First Image: " << std::endl;
-        mnist_images[0].print();
-        std::cout << "First Label: " << std::endl;
-        std::cout << labels[0] << std::endl; */
+        //std::cout << "First Image: " << std::endl;
+        // mnistTrain[20].print();
+        // std::cout << "First Label: " << std::endl;
+        // std::cout << labelsTrain[20] << std::endl; 
 
-        FFNN model({ 784, 5, 10 }); // 28 * 28 img size = 784 1-D array
+        FFNN model({ 784, 32, 16, 10 }); // 28 * 28 img size = 784 1-D array
 
-        model.train(mnistTrain, labelsTrain);
+        int epochs = 20;
+        for (int i = 0; i < epochs; i++) {
+            model.train(mnistTrain, labelsTrain, 1, 32, .4); // Train for one epoch
+            double acc = model.eval(mnistTest, labelsTest);
+            std::cout << "Epoch: " << i << "\tOverall Model Accuracy: " << acc << std::endl;
+        }
 
-        double acc = model.eval(mnistTest, labelsTest);
-
-        std::cout << "Overall Model Accuracy: " << acc << std::endl;
+        //std::cout << "Overall Model Accuracy: " << acc << std::endl;
 
     }
     catch (const std::exception& ex) {

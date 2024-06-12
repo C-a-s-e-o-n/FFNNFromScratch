@@ -44,17 +44,20 @@ public:
     }
 
     // Stochastic Gradient Descent
-    void train(const std::vector<Matrix>& Xtrain, const std::vector<int>& Ytrain, int epochs = 10, int miniBatchSize = 32, double learningRate = 0.01) {
+    void train(const std::vector<Matrix>& Xtrain, const std::vector<int>& Ytrain, int epochs, int miniBatchSize, double learningRate) {
         assert(Xtrain.size() == Ytrain.size());
 
         for (int epoch = 0; epoch < epochs; epoch++) {
             std::cout << "Epoch: " << epoch << "\t";
             double epochLoss = 0.0; // Track error for each epoch
 
+            // Seed the random number generator
+            std::default_random_engine gen(std::chrono::system_clock::now().time_since_epoch().count());
+
             // Shuffle training data
             std::vector<size_t> indices(Xtrain.size());
             std::iota(indices.begin(), indices.end(), 0);
-            std::shuffle(indices.begin(), indices.end(), std::default_random_engine());
+            std::shuffle(indices.begin(), indices.end(), gen);
 
             // Divide data into mini-batches
             for (size_t i = 0; i < Xtrain.size(); i += miniBatchSize) {
@@ -66,6 +69,13 @@ public:
                     miniBatchData.push_back(Xtrain[indices[j]]);
                     miniBatchTargets.push_back(Ytrain[indices[j]]);
                 }
+
+                // Print the mini-batch data and targets
+                //std::cout << "Mini-batch data for indices " << i << " to " << std::min(i + miniBatchSize, Xtrain.size()) - 1 << ":" << std::endl;
+                //for (size_t k = 0; k < miniBatchData.size(); ++k) {
+                    //miniBatchData[k].print();
+                    //std::cout << "Label: " << miniBatchTargets[k] << std::endl;
+                //}
 
                 // forward pass for the mini-batch
                 std::vector<Matrix> outputs = forward(miniBatchData);
@@ -152,17 +162,22 @@ public:
                 maxIdx = i;
             }
         }
-        return maxIdx + 1;
+        return maxIdx;
     }
-
+    int count = 0;
     // one hot encoding
     std::vector<Matrix> createOneHotTargets(const std::vector<int>& targetLabels, int numClasses) {
+        count++;
         std::vector<Matrix> oneHotTargets;
 
         for (const auto& label : targetLabels) {
             Matrix target(numClasses, 1, 0.0); // Initialize the target matrix with zeros
             target[label][0] = 1.0; // set corresponding class label to 1
             oneHotTargets.push_back(target);
+        }
+        if (count == 1) {
+            std::cout << targetLabels[0] << std::endl;
+            oneHotTargets[0].print();
         }
         return oneHotTargets;
     }

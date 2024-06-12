@@ -3,6 +3,7 @@
 #include "Matrix.hpp"
 #include "ActivationFunction.hpp"
 #include "Utils.hpp"
+#include <random>
 
 
 class Layer {
@@ -13,14 +14,23 @@ public:
 
 	Matrix activation_output; // activated z
 
-	Layer(size_t numNeurons, size_t numInputsPerNeuron) : 
+	Layer(size_t numNeurons, size_t numInputsPerNeuron) :
 		weights(numNeurons, numInputsPerNeuron), biases(numNeurons, 1)
 	{
+
+		// seed for random number generator
+		std::random_device rd;
+		std::mt19937 gen(rd());
+
+		// define dist range for random numbers
+		std::uniform_real_distribution<> weight_dis(-1.0, 1.0);
+		std::uniform_real_distribution<> bias_dis(-1.0, 1.0);
+
 		for (size_t i = 0; i < numNeurons; i++) {
 			for (size_t j = 0; j < numInputsPerNeuron; j++) {
-				weights[i][j] = 0.1; 
+				weights[i][j] = weight_dis(gen); 
 			}
-			biases[i][0] = 0.1;
+			biases[i][0] = bias_dis(gen);
 		}
 	}
 
@@ -31,6 +41,7 @@ public:
 
 	void updateWeightsAndBiases(const Matrix& weightGradient, const Matrix& biasGradient, double learningRate) {
 		// update weights and biases
+	
 		weights = weights - (weightGradient * learningRate);
 		biases = biases - (biasGradient * learningRate);
 	}
