@@ -7,6 +7,7 @@ enum class Activations {
 	sigmoid,
 	relu
 };
+
 // Vectorized sigmoid function for matrix input/output
 Matrix sigmoid(const Matrix& input) {
     Matrix result(input.numRows(), input.numCols());

@@ -46,7 +46,6 @@ public:
     // Stochastic Gradient Descent
     void train(const std::vector<Matrix>& Xtrain, const std::vector<int>& Ytrain, int epochs, int miniBatchSize, double learningRate) {
         assert(Xtrain.size() == Ytrain.size());
-        double lambda = 0.001; // L2 regularization term
 
         for (int epoch = 0; epoch < epochs; epoch++) {
             std::cout << "Epoch: " << epoch << "\t";
@@ -86,22 +85,21 @@ public:
 
                 // calc mse for mini-batch
                 double miniBatchLoss = 0.0;
-                for (size_t k = 0; k < miniBatchData.size(); k++) {
-                    miniBatchLoss += meanSquaredError(outputs[k], oneHotLabels[k]);
+                for (size_t i = 0; i < miniBatchData.size(); i++) {
+                    miniBatchLoss += meanSquaredError(outputs[i], oneHotLabels[i]);
                 }
                 epochLoss += miniBatchLoss;
 
                 // Forward and backward pass for the mini-batch
                 Gradients grad = backward(miniBatchData, outputs, oneHotLabels);
 
-                for (size_t l = 0; l < layers.size(); l++) {
-                    layers[l].updateWeightsAndBiases(grad.weightGradients[l], grad.biasGradients[l], learningRate, lambda);
+                for (size_t i = 0; i < layers.size(); i++) {
+                    layers[i].updateWeightsAndBiases(grad.weightGradients[i], grad.biasGradients[i], learningRate);
                 }
             }
 
             // Output epoch loss
-            std::cout << "Loss: " << (epochLoss / Xtrain.size()) << std::endl;
-            std::cout << "size: " << Xtrain.size() << std::endl;
+            std::cout << "Loss: " << (epochLoss / Xtrain.size()) << std::endl;        
         }
     }
 
@@ -123,7 +121,7 @@ public:
 
 
         for (int i = numLayers - 2; i >= 0; i--) {
-            delta[i] = (layers[i + 1].weights.T() * delta[i + 1]).elementwiseMult(reluPrime(layers[i].z));  // Shape should be (numNeuronsInCurrentLayer x 1)
+            delta[i] = (layers[i + 1].weights.T() * delta[i + 1]).elementwiseMult(sigmoidPrime(layers[i].z));  // Shape should be (numNeuronsInCurrentLayer x 1)
 
             if (i > 0) {
                 weightGradients[i] = delta[i] * layers[i - 1].getOutput().T();  // Shape should be (numNeuronsInCurrentLayer x numNeuronsInPreviousLayer)

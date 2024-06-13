@@ -63,7 +63,7 @@ public:
 		for (size_t i = 0; i < rows; ++i) {
 			result.data[i][0] = data[i][colIdx];
 		}
-		return std::move(result);
+		return result;
 	}
 
 	const std::vector<double>& getRow(size_t rowIdx) const {
@@ -105,7 +105,7 @@ public:
 				result.data[i][j] = data[i][j] + other.data[i][j];
 			}
 		}
-		return std::move(result);
+		return result;
 	}
 
 	// elementwise subtraction
@@ -121,7 +121,7 @@ public:
 				result.data[i][j] = data[i][j] - other.data[i][j];
 			}
 		}
-		return std::move(result);
+		return result;
 	}
 
 	// scalar addition 
@@ -133,7 +133,7 @@ public:
 				result.data[i][j] = data[i][j] + scalar;
 			}
 		}
-		return std::move(result);
+		return result;
 	}
 
 
@@ -146,7 +146,7 @@ public:
 				result.data[i][j] = data[i][j] - scalar;
 			}
 		}
-		return std::move(result);
+		return result;
 	}
 
 	// matrix multiplication
@@ -166,7 +166,7 @@ public:
 				result.data[i][j] = sum;
 			}
 		}
-		return std::move(result);
+		return result;
 	}
 
 	// elementwise multiplication
@@ -184,7 +184,7 @@ public:
 				result.data[i][j] = data[i][j] * other.data[i][j];
 			}
 		}
-		return std::move(result);
+		return result;
 	}
 
 	// scalar multiplication
@@ -196,7 +196,7 @@ public:
 				result.data[i][j] = data[i][j] * scalar;
 			}
 		}
-		return std::move(result);
+		return result;
 	}
 
 	// transposition
@@ -209,7 +209,7 @@ public:
 				result.data[j][i] = data[i][j];
 			}
 		}
-		return std::move(result);
+		return result;
 	}
 
 	// converting from vector to 1-dimensional matrix
@@ -219,7 +219,7 @@ public:
 		for (size_t i = 0; i < vec.size(); i++) {
 			result.data[i][0] = vec[i];
 		}
-		return std::move(result);
+		return result;
 	}
 
 	// flatten matrix to column vector
@@ -230,7 +230,7 @@ public:
 				result.data[i * numCols() + j][0] = data[i][j];
 			}
 		}
-		return std::move(result);
+		return result;
 	}
 
 private:

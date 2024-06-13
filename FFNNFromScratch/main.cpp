@@ -33,25 +33,25 @@ int main() {
 
         FFNN model({ 784, 128, 64, 10 }); // 28 * 28 img size = 784 1-D array
 
-        int epochs = 5;
-        for (int i = 0; i < epochs; i++) {
-            model.train(mnistTrain, labelsTrain, 1, 64, 0.009); // Train for one epoch
-            double acc = model.eval(mnistTest, labelsTest);
-            std::cout << "Epoch: " << i << "\tOverall Model Accuracy: " << acc << std::endl;
-        }
+        //int epochs = 5;
+        //for (int i = 0; i < epochs; i++) {
+        //    model.train(mnistTrain, labelsTrain, 1, 32, 0.1); // Train for one epoch
+        //    double acc = model.eval(mnistTest, labelsTest);
+        //    std::cout << "Epoch: " << i << "\tOverall Model Accuracy: " << acc << std::endl;
+        //}
 
         std::string savePath = "Models/ffnn_model.dat";
         std::string loadPath = "Models/ffnn_model.dat";
 
         // save the model to a file
-        saveModel(model.getLayers(), savePath);
+        //saveModel(model.getLayers(), savePath);
         
         // load file into new FFNN object and test loaded model
         FFNN newModel({ 784, 128, 64, 10 });
         loadModel(newModel.getLayers(), loadPath);
 
 
-        std::cout << "Loaded Model Accuracy: " << newModel.eval(mnistTest, labelsTest) << std::endl;
+        //std::cout << "Loaded Model Accuracy: " << newModel.eval(mnistTest, labelsTest) << std::endl;
 
     }
     catch (const std::exception& ex) {
