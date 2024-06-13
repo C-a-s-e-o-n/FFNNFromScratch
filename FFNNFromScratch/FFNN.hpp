@@ -46,6 +46,7 @@ public:
     // Stochastic Gradient Descent
     void train(const std::vector<Matrix>& Xtrain, const std::vector<int>& Ytrain, int epochs, int miniBatchSize, double learningRate) {
         assert(Xtrain.size() == Ytrain.size());
+        double lambda = 0.001; // L2 regularization term
 
         for (int epoch = 0; epoch < epochs; epoch++) {
             std::cout << "Epoch: " << epoch << "\t";
@@ -94,7 +95,7 @@ public:
                 Gradients grad = backward(miniBatchData, outputs, oneHotLabels);
 
                 for (size_t l = 0; l < layers.size(); l++) {
-                    layers[l].updateWeightsAndBiases(grad.weightGradients[l], grad.biasGradients[l], learningRate);
+                    layers[l].updateWeightsAndBiases(grad.weightGradients[l], grad.biasGradients[l], learningRate, lambda);
                 }
             }
 

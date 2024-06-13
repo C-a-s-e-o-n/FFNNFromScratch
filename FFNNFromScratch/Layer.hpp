@@ -25,7 +25,7 @@ public:
 		// define dist range for random numbers
 		// Xavier initialization (NECESSARY FOR RELU)
 		std::uniform_real_distribution<> weight_dis(-1.0 / sqrt(numInputsPerNeuron), 1.0 / sqrt(numInputsPerNeuron));
-		std::uniform_real_distribution<> bias_dis(-0.1, 0.1);
+		std::uniform_real_distribution<> bias_dis(0.0, 0.1);
 
 		for (size_t i = 0; i < numNeurons; i++) {
 			for (size_t j = 0; j < numInputsPerNeuron; j++) {
@@ -40,11 +40,14 @@ public:
 		activation_output = relu(z);
 	}
 
-	void updateWeightsAndBiases(const Matrix& weightGradient, const Matrix& biasGradient, double learningRate) {
-		// update weights and biases
-	
-		weights = weights - (weightGradient * learningRate);
-		biases = biases - (biasGradient * learningRate);
+	void updateWeightsAndBiases(const Matrix& weightGradient, const Matrix& biasGradient, double learningRate, double lambda) {
+		// update weights with L2 regularization
+		Matrix weightUpdate = weightGradient * learningRate - (weights * lambda);
+		weights = weights - weightUpdate;
+
+		// update biases with L2 regularization
+		Matrix biasUpdate = biasGradient * learningRate - (biases * lambda);
+		biases = biases - biasUpdate;
 	}
 
 	Matrix getOutput() const {

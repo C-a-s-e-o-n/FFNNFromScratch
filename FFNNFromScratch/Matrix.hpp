@@ -63,7 +63,7 @@ public:
 		for (size_t i = 0; i < rows; ++i) {
 			result.data[i][0] = data[i][colIdx];
 		}
-		return result;
+		return std::move(result);
 	}
 
 	const std::vector<double>& getRow(size_t rowIdx) const {
@@ -105,7 +105,7 @@ public:
 				result.data[i][j] = data[i][j] + other.data[i][j];
 			}
 		}
-		return result;
+		return std::move(result);
 	}
 
 	// elementwise subtraction
@@ -121,7 +121,7 @@ public:
 				result.data[i][j] = data[i][j] - other.data[i][j];
 			}
 		}
-		return result;
+		return std::move(result);
 	}
 
 	// scalar addition 
@@ -133,7 +133,7 @@ public:
 				result.data[i][j] = data[i][j] + scalar;
 			}
 		}
-		return result;
+		return std::move(result);
 	}
 
 
@@ -146,7 +146,7 @@ public:
 				result.data[i][j] = data[i][j] - scalar;
 			}
 		}
-		return result;
+		return std::move(result);
 	}
 
 	// matrix multiplication
@@ -166,7 +166,7 @@ public:
 				result.data[i][j] = sum;
 			}
 		}
-		return result;
+		return std::move(result);
 	}
 
 	// elementwise multiplication
@@ -184,7 +184,7 @@ public:
 				result.data[i][j] = data[i][j] * other.data[i][j];
 			}
 		}
-		return result;
+		return std::move(result);
 	}
 
 	// scalar multiplication
@@ -196,7 +196,7 @@ public:
 				result.data[i][j] = data[i][j] * scalar;
 			}
 		}
-		return result;
+		return std::move(result);
 	}
 
 	// transposition
@@ -209,7 +209,7 @@ public:
 				result.data[j][i] = data[i][j];
 			}
 		}
-		return result;
+		return std::move(result);
 	}
 
 	// converting from vector to 1-dimensional matrix
@@ -219,18 +219,18 @@ public:
 		for (size_t i = 0; i < vec.size(); i++) {
 			result.data[i][0] = vec[i];
 		}
-		return result;
+		return std::move(result);
 	}
 
 	// flatten matrix to column vector
 	Matrix flatten() const {
-		Matrix flattened(numRows() * numCols(), 1);
+		Matrix result(numRows() * numCols(), 1);
 		for (size_t i = 0; i < numRows(); i++) {
 			for (size_t j = 0; j < numCols(); j++) {
-				flattened.data[i * numCols() + j][0] = data[i][j];
+				result.data[i * numCols() + j][0] = data[i][j];
 			}
 		}
-		return flattened;
+		return std::move(result);
 	}
 
 private:
