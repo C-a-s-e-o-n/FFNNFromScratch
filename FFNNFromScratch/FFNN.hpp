@@ -121,7 +121,7 @@ public:
 
 
         for (int i = numLayers - 2; i >= 0; i--) {
-            delta[i] = (layers[i + 1].weights.T() * delta[i + 1]).elementwiseMult(sigmoidPrime(layers[i].z));  // Shape should be (numNeuronsInCurrentLayer x 1)
+            delta[i] = (layers[i + 1].weights.T() * delta[i + 1]).elementwiseMult(reluPrime(layers[i].z));  // Shape should be (numNeuronsInCurrentLayer x 1)
 
             if (i > 0) {
                 weightGradients[i] = delta[i] * layers[i - 1].getOutput().T();  // Shape should be (numNeuronsInCurrentLayer x numNeuronsInPreviousLayer)

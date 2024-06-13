@@ -33,7 +33,7 @@ int main() {
 
         FFNN model({ 784, 128, 64, 10 }); // 28 * 28 img size = 784 1-D array
 
-        int epochs = 20;
+        int epochs = 5;
         for (int i = 0; i < epochs; i++) {
             model.train(mnistTrain, labelsTrain, 1, 32, 0.01); // Train for one epoch
             double acc = model.eval(mnistTest, labelsTest);

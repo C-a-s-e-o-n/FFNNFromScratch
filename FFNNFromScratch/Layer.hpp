@@ -36,7 +36,7 @@ public:
 
 	void feedForward(const Matrix& inputs) {
 		z = (weights * inputs) + biases; // dont forget order matters with mat mult
-		activation_output = sigmoid(z);
+		activation_output = relu(z);
 	}
 
 	void updateWeightsAndBiases(const Matrix& weightGradient, const Matrix& biasGradient, double learningRate) {
