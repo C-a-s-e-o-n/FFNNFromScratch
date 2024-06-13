@@ -85,21 +85,22 @@ public:
 
                 // calc mse for mini-batch
                 double miniBatchLoss = 0.0;
-                for (size_t i = 0; i < miniBatchData.size(); i++) {
-                    miniBatchLoss += meanSquaredError(outputs[i], oneHotLabels[i]);
+                for (size_t k = 0; k < miniBatchData.size(); k++) {
+                    miniBatchLoss += meanSquaredError(outputs[k], oneHotLabels[k]);
                 }
                 epochLoss += miniBatchLoss;
 
                 // Forward and backward pass for the mini-batch
                 Gradients grad = backward(miniBatchData, outputs, oneHotLabels);
 
-                for (size_t i = 0; i < layers.size(); i++) {
-                    layers[i].updateWeightsAndBiases(grad.weightGradients[i], grad.biasGradients[i], learningRate);
+                for (size_t l = 0; l < layers.size(); l++) {
+                    layers[l].updateWeightsAndBiases(grad.weightGradients[l], grad.biasGradients[l], learningRate);
                 }
             }
 
             // Output epoch loss
             std::cout << "Loss: " << (epochLoss / Xtrain.size()) << std::endl;
+            std::cout << "size: " << Xtrain.size() << std::endl;
         }
     }
 
@@ -206,7 +207,7 @@ public:
         return prediction[0][0] - target; // Simplest form for now
     }
 
-    std::vector<Layer> getLayers() const noexcept {
+    std::vector<Layer>& getLayers() noexcept {
         return layers;
     }
 

@@ -35,7 +35,7 @@ int main() {
 
         int epochs = 5;
         for (int i = 0; i < epochs; i++) {
-            model.train(mnistTrain, labelsTrain, 1, 32, 0.01); // Train for one epoch
+            model.train(mnistTrain, labelsTrain, 1, 16, 0.01); // Train for one epoch
             double acc = model.eval(mnistTest, labelsTest);
             std::cout << "Epoch: " << i << "\tOverall Model Accuracy: " << acc << std::endl;
         }

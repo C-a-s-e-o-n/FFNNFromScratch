@@ -37,11 +37,11 @@ void saveModel(const std::vector<Layer>& layers, const std::string& filename) {
 			}
 		}
 
-		file.close();
 	}
+	file.close();
 }
 
-void loadModel(const std::vector<Layer>& layers, const std::string& filename) {
+void loadModel(std::vector<Layer>& layers, const std::string& filename) {
 	std::ifstream file(filename, std::ios::binary);
 	if (!file.is_open()) {
 		throw std::runtime_error("Unable to open file for loading model");

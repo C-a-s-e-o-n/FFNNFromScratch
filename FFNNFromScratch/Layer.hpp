@@ -23,7 +23,8 @@ public:
 		std::mt19937 gen(rd());
 
 		// define dist range for random numbers
-		std::uniform_real_distribution<> weight_dis(-1.0, 1.0);
+		// Xavier initialization (NECESSARY FOR RELU)
+		std::uniform_real_distribution<> weight_dis(-1.0 / sqrt(numInputsPerNeuron), 1.0 / sqrt(numInputsPerNeuron));
 		std::uniform_real_distribution<> bias_dis(-0.1, 0.1);
 
 		for (size_t i = 0; i < numNeurons; i++) {
