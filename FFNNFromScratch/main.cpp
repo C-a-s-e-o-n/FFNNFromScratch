@@ -8,6 +8,7 @@ using namespace cv;
 #include "Utils.hpp"
 #include "FFNN.hpp"
 #include "MNISTLoader.hpp"
+#include "Serialize.hpp"
 
 
 
@@ -34,12 +35,23 @@ int main() {
 
         int epochs = 20;
         for (int i = 0; i < epochs; i++) {
-            model.train(mnistTrain, labelsTrain, 1, 32, .1); // Train for one epoch
+            model.train(mnistTrain, labelsTrain, 1, 32, 0.01); // Train for one epoch
             double acc = model.eval(mnistTest, labelsTest);
             std::cout << "Epoch: " << i << "\tOverall Model Accuracy: " << acc << std::endl;
         }
 
-        //std::cout << "Overall Model Accuracy: " << acc << std::endl;
+        std::string savePath = "Models/ffnn_model.dat";
+        std::string loadPath = "Models/ffnn_model.dat";
+
+        // save the model to a file
+        saveModel(model.getLayers(), savePath);
+        
+        // load file into new FFNN object and test loaded model
+        FFNN newModel({ 784, 128, 64, 10 });
+        loadModel(newModel.getLayers(), loadPath);
+
+
+        std::cout << "Loaded Model Accuracy: " << newModel.eval(mnistTest, labelsTest) << std::endl;
 
     }
     catch (const std::exception& ex) {

@@ -206,6 +206,10 @@ public:
         return prediction[0][0] - target; // Simplest form for now
     }
 
+    std::vector<Layer> getLayers() const noexcept {
+        return layers;
+    }
+
 private:
     std::vector<Layer> layers; // overall network structure
 };

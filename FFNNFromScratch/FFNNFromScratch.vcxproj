@@ -151,6 +151,7 @@
     <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="MNISTLoader.hpp" />
     <ClInclude Include="Neuron.hpp" />
+    <ClInclude Include="Serialize.hpp" />
     <ClInclude Include="Utils.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
