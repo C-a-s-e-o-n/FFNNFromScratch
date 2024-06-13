@@ -29,8 +29,6 @@ public:
         std::vector<Matrix> layer_outputs;
         Matrix current_input;
 
-
-
         for (auto& input : inputs) {
             current_input = input.flatten();
             for (auto& layer : layers) {
@@ -69,13 +67,6 @@ public:
                     miniBatchData.push_back(Xtrain[indices[j]]);
                     miniBatchTargets.push_back(Ytrain[indices[j]]);
                 }
-
-                // Print the mini-batch data and targets
-                //std::cout << "Mini-batch data for indices " << i << " to " << std::min(i + miniBatchSize, Xtrain.size()) - 1 << ":" << std::endl;
-                //for (size_t k = 0; k < miniBatchData.size(); ++k) {
-                    //miniBatchData[k].print();
-                    //std::cout << "Label: " << miniBatchTargets[k] << std::endl;
-                //}
 
                 // forward pass for the mini-batch
                 std::vector<Matrix> outputs = forward(miniBatchData);

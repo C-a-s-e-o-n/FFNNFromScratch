@@ -109,6 +109,7 @@ private:
 			Matrix img_matrix(rows, cols);
 			for (int i = 0; i < rows; ++i) {
 				for (int j = 0; j < cols; ++j) {
+					// normalization to get pixel vals between [0, 1]
 					img_matrix[i][j] = static_cast<double>(static_cast<unsigned char>((pixels[i * cols + j]))) / 255.0;
 				}
 			}

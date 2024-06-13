@@ -16,42 +16,40 @@ int main() {
     try {
         MNISTLoader trainLoader("Data/train-images.idx3-ubyte", "Data/train-labels.idx1-ubyte");
         MNISTLoader testLoader("Data/t10k-images.idx3-ubyte", "Data/t10k-labels.idx1-ubyte");
-        //loader.display_images();
 
-        // retrive images as matrix objects
+        // retrieve images as matrix objects
         std::vector<Matrix> mnistTrain = trainLoader.getImages();
         std::vector<int> labelsTrain = trainLoader.getLabels();
 
         std::vector<Matrix> mnistTest = testLoader.getImages();
         std::vector<int> labelsTest = testLoader.getLabels();
 
-        // print the first image
-        //std::cout << "First Image: " << std::endl;
-        // mnistTrain[20].print();
-        // std::cout << "First Label: " << std::endl;
-        // std::cout << labelsTrain[20] << std::endl; 
-
         FFNN model({ 784, 128, 64, 10 }); // 28 * 28 img size = 784 1-D array
 
-        //int epochs = 5;
-        //for (int i = 0; i < epochs; i++) {
-        //    model.train(mnistTrain, labelsTrain, 1, 32, 0.1); // Train for one epoch
-        //    double acc = model.eval(mnistTest, labelsTest);
-        //    std::cout << "Epoch: " << i << "\tOverall Model Accuracy: " << acc << std::endl;
-        //}
-
-        std::string savePath = "Models/ffnn_model.dat";
         std::string loadPath = "Models/ffnn_model.dat";
-
-        // save the model to a file
-        //saveModel(model.getLayers(), savePath);
         
         // load file into new FFNN object and test loaded model
-        FFNN newModel({ 784, 128, 64, 10 });
-        loadModel(newModel.getLayers(), loadPath);
+        loadModel(model.getLayers(), loadPath);
+
+        // TODO: get the input image from the user, with an SFML drawing app that allows digits to be manually drawn
+        // get the digits, normalize the values, and resize the vector into a 28 * 28 and then flatten and forward pass
 
 
-        //std::cout << "Loaded Model Accuracy: " << newModel.eval(mnistTest, labelsTest) << std::endl;
+        // test a specific training example using the model: 
+        int exIdx = 400;
+        Matrix singleTestImage = mnistTrain[exIdx];
+        int label = labelsTrain[exIdx];
+
+        std::vector<Matrix> inputVec = { singleTestImage };
+        std::vector<Matrix> outputVec = model.forward(inputVec);
+        Matrix output = outputVec[0];
+
+        // get predicted label
+        int predictedLabel = model.getPrediction(output);
+
+        std::cout << "Actual label: " << label << std::endl;
+        std::cout << "Predicted label: " << predictedLabel << std::endl;
+
 
     }
     catch (const std::exception& ex) {
