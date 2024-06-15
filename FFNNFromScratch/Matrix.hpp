@@ -18,6 +18,23 @@ public:
 		data.resize(rows, std::vector<double>(cols, initVal)); // initialize matrix of vals
 	}
 
+	// Resize
+	void resize(size_t newRows, size_t newCols, double initVal = 0.0) {
+		std::vector < std::vector<double>> newData(newRows, std::vector<double>(newCols, initVal));
+
+		// copy existing data to the new data structure
+		for (size_t i = 0; i < std::min(rows, newRows); i++) {
+			for (size_t j = 0; j < std::min(cols, newCols); j++) {
+				newData[i][j] = data[i][j];
+			}
+		}
+
+		// update the data and dimensions
+		data = std::move(newData);
+		rows = newRows;
+		cols = newCols;
+	}
+
 	// Accessors
 	// used to modify the matrix
 	std::vector<double>& operator[](size_t index) {
