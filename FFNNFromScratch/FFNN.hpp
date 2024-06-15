@@ -2,6 +2,8 @@
 #include "Utils.hpp"
 #include <numeric>
 #include <random>
+#include <cassert>
+#include <chrono>
 #include "Layer.hpp"
 #include "Matrix.hpp"
 #include "ActivationFunction.hpp"

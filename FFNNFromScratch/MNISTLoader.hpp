@@ -17,29 +17,6 @@ public:
 		load_mnist(image_filename, label_filename);
 	}
 
-	void display_images() {
-		char* pixels = new char[rows * cols];
-
-		for (int item_id = 0; item_id < num_items; ++item_id) {
-			// read image pixel
-			image_file.read(pixels, rows * cols);
-			// read label
-			label_file.read(&label, 1);
-
-			std::string sLabel = std::to_string(static_cast<int>(label));
-			std::cout << "Label is: " << sLabel << std::endl;
-
-			// convert it to cv::Mat and show it
-			cv::Mat image_tmp(rows, cols, CV_8UC1, pixels);
-			// resize bigger for showing
-			cv::resize(image_tmp, image_tmp, cv::Size(200, 200));
-			cv::imshow(sLabel, image_tmp);
-			cv::waitKey(0);
-		}
-
-		delete[] pixels;
-	}
-
 	std::vector<Matrix> getImages() const {
 		return images;
 	}
