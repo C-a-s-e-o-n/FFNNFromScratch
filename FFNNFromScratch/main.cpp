@@ -28,8 +28,8 @@ int main() {
 
         // TODO: get the input image from the user, with an SFML drawing app that allows digits to be manually drawn
         // get the digits, normalize the values, and resize the vector into a 28 * 28 and then flatten and forward pass
-        sf::RenderWindow window(sf::VideoMode(800, 600), "Digit Recognition");
-        Paint canvas(window);
+        sf::RenderWindow window(sf::VideoMode(500, 500), "Digit Recognition");
+        Paint canvas(window, model);
 
     }
     catch (const std::exception& ex) {
