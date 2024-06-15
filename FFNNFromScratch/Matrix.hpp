@@ -20,7 +20,7 @@ public:
 
 	// Resize
 	void resize(size_t newRows, size_t newCols, double initVal = 0.0) {
-		std::vector < std::vector<double>> newData(newRows, std::vector<double>(newCols, initVal));
+		std::vector<std::vector<double>> newData(newRows, std::vector<double>(newCols, initVal));
 
 		// copy existing data to the new data structure
 		for (size_t i = 0; i < std::min(rows, newRows); i++) {
