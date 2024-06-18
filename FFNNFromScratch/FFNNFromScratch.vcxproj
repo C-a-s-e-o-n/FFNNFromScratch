@@ -142,18 +142,13 @@
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="images\hk.png" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="ActivationFunction.hpp" />
     <ClInclude Include="FFNN.hpp" />
     <ClInclude Include="Layer.hpp" />
     <ClInclude Include="Matrix.hpp" />
     <ClInclude Include="MNISTLoader.hpp" />
-    <ClInclude Include="Neuron.hpp" />
     <ClInclude Include="Paint.hpp" />
     <ClInclude Include="Serialize.hpp" />
-    <ClInclude Include="Utils.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

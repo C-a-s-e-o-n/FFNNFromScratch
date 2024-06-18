@@ -26,18 +26,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="images\hk.png">
-      <Filter>images</Filter>
-    </Image>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="FFNN.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Layer.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Neuron.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MNISTLoader.hpp">
@@ -49,10 +41,10 @@
     <ClInclude Include="ActivationFunction.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Utils.hpp">
+    <ClInclude Include="Serialize.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Serialize.hpp">
+    <ClInclude Include="Paint.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
